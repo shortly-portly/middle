@@ -1,0 +1,56 @@
+{:duct.profile/base
+ {:duct.core/project-ns middle
+
+  :duct.router/ataraxy
+  {
+   :middleware {:middleware/first #ig/ref :middle.middleware/first}
+
+   :routes
+   {[:get "/"] ^:middleware/first [:middle.handler.middle/index]}}
+
+  ;middleware
+  :middle.middleware/first {}
+ 
+  ;handlers
+  :middle.handler.middle/index {}
+  }
+
+ :duct.profile/dev   #duct/include "dev"
+ :duct.profile/local #duct/include "local"
+ :duct.profile/prod  {}
+
+ :duct.module/logging {}
+ :duct.module.web/site
+ {}}
+
+
+{:duct.profile/base
+ {:duct.core/project-ns middle
+
+  :duct.router/ataraxy
+  {
+   :middleware {:middleware/insecure #ig/ref :middle.middleware/insecure
+                :middleware/secure #ig/ref :middle.middleware/secure}
+
+   :routes
+   {
+    [:get "/insecure"] ^:middleware/insecure
+    {
+     [:get "/welcome"] [:middle.hanlde.middle/welcome]
+     [:get "/about"] [:middle.handle.middle/about]}
+
+    [:get "/secure"] ^:middleware/secure
+    {
+     [:get "/secret"] [:middleware.handle.middle/secret]
+     [:get "/private"] [:middleware.handle.middle/private]}}
+
+  ;middleware
+  :middle.middleware/insecure {}
+  :middle.middleware/secure {}
+
+  ;handlers
+  :middle.handle.middle/welcome {}
+  :middle.handle.middle/about {}
+  :middle.handle.middle/secret {}
+  :middle.handle.middle/private {}
+  }
